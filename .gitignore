@@ -1,0 +1,32 @@
+# Logs
+logs
+*.log
+
+# Build files
+build/
+dist/
+*.d.ts
+*.js.map
+
+# Dependency directories
+node_modules/
+
+# Editor files
+.idea
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Cache files
+*.cache
+*.tgz
+*.lock
+
+# Tests
+/coverage
+
+# Output of 'npm pack'
+*.tgz
