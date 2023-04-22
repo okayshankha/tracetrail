@@ -28,8 +28,9 @@ export class TraceTrail {
         res.__json = res?.json
         res.json = function (payload: { [key: string]: any }) {
             this.__requestOverview = {
+                endpoint: req.originalUrl,
+                method: req.method,
                 input: {
-                    method: req.method,
                     headers: req.headers,
                     params: req.params,
                     query: req.query,
