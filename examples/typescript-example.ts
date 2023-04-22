@@ -7,7 +7,7 @@ const port = 3000
 
 const traceTrail = new TraceTrail('mongodb://192.168.0.100:27017/TraceTrail')
 
-app.use('/dash', traceTrail.UI())
+app.use('/tracetrail', traceTrail.UI())
 app.use(traceTrail.MiddleWare)
 
 
