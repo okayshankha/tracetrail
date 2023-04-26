@@ -53,7 +53,7 @@ export class TraceTrail {
 
                 if (res.__tracetrail_requestOverview) {
                     const timeTakenInMilliseconds = Dayjs().diff(res.__tracetrail_started_at, 'milliseconds')
-                    res.__tracetrail_requestOverview.timeTakenInMilliseconds = timeTakenInMilliseconds || 1
+                    res.__tracetrail_requestOverview.timeTakenInMilliseconds = +timeTakenInMilliseconds
                     await MONGO_MODEL.create(res.__tracetrail_requestOverview)
                 }
 
@@ -66,6 +66,8 @@ export class TraceTrail {
     }
 
     UI() {
-        return server
+        return server({
+            MONGO_MODEL
+        })
     }
 }

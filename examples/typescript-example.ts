@@ -12,7 +12,7 @@ app.use(traceTrail.MiddleWare)
 
 
 app.get('/', (req, res) => {
-    res.json({ Hello: 'World!' })
+    res.json({ Hello: 'World!' + Date.now() })
 })
 
 app.listen(port, () => {
