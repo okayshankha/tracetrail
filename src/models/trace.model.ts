@@ -1,4 +1,4 @@
-import { Connection, Document, Schema, model as Model } from 'mongoose';
+import { Connection, Document, Schema } from 'mongoose';
 
 interface ITraceTrail extends Document {
   endpoint: string

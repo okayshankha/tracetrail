@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { Logger } from '../core/logger'
 
 const ITEMS_PER_PAGE = 10
