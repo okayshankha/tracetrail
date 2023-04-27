@@ -1,6 +1,6 @@
 {
   "name": "tracetrail",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A simple package",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -8,12 +8,12 @@
     "dist"
   ],
   "scripts": {
-    "dev:ts": "ts-node examples/typescript-example.ts",
-    "dev": "node examples/javascript-example.js",
     "start": "npm run build && node dist/index.js",
     "build": "rimraf ./dist && tsc -d",
     "lint": "eslint . --ext .ts --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1",
+    "test:ts": "ts-node examples/typescript-example.ts",
+    "test:js": "node examples/javascript-example.js"
   },
   "repository": {
     "type": "git",
