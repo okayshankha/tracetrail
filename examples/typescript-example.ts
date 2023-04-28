@@ -1,5 +1,5 @@
 
-import { TraceTrail } from 'tracetrail'
+import { TraceTrail } from '../src'
 import express from 'express'
 
 const app = express()

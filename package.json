@@ -1,12 +1,23 @@
 {
   "name": "tracetrail",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple package",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "ui"
+  ],
+  "keywords": [
+    "express",
+    "http",
+    "logger",
+    "middleware",
+    "express",
+    "body",
+    "request",
+    "response",
+    "logging"
   ],
   "scripts": {
     "start": "npm run build && node dist/index.js",
