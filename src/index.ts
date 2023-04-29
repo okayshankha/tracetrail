@@ -5,14 +5,15 @@ import mongoose from 'mongoose';
 import { Logger } from './core/logger';
 import server from './app/server'
 import Dayjs from 'dayjs';
+import { JSONObject } from './@types/json';
 
-let MONGO_MODEL: mongoose.Model<{ [key: string]: string }>
+let MONGO_MODEL: mongoose.Model<JSONObject>
 
 export class TraceTrail {
 
     constructor(
         DB_CONNECTION_STRING: string,
-        DB_CONNECTION_OPTIONS: { [key: string]: any } = {
+        DB_CONNECTION_OPTIONS: JSONObject = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         }
@@ -26,7 +27,7 @@ export class TraceTrail {
     MiddleWare(req: Request, res: Response, next: NextFunction) {
         res.__tracetrail_started_at = Dayjs().toDate()
         res.__tracetrail_json = res?.json
-        res.json = function (payload: { [key: string]: any }) {
+        res.json = function (payload: JSONObject) {
             this.__tracetrail_requestOverview = {
                 endpoint: req.originalUrl,
                 method: req.method,
@@ -51,11 +52,9 @@ export class TraceTrail {
                     return
                 }
 
-
-                const timeTakenInMilliseconds = Dayjs().diff(res.__tracetrail_started_at, 'milliseconds')
-                res.__tracetrail_requestOverview.timeTakenInMilliseconds = timeTakenInMilliseconds || 1
-
                 if (res.__tracetrail_requestOverview) {
+                    const timeTakenInMilliseconds = Dayjs().diff(res.__tracetrail_started_at, 'milliseconds')
+                    res.__tracetrail_requestOverview.timeTakenInMilliseconds = +timeTakenInMilliseconds
                     await MONGO_MODEL.create(res.__tracetrail_requestOverview)
                 }
 
@@ -68,6 +67,8 @@ export class TraceTrail {
     }
 
     UI() {
-        return server
+        return server({
+            MONGO_MODEL
+        })
     }
 }

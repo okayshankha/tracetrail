@@ -1,4 +1,4 @@
-import { Connection, Document, Schema, model as Model } from 'mongoose';
+import { Connection, Document, Schema } from 'mongoose';
 
 interface ITraceTrail extends Document {
   endpoint: string
@@ -20,7 +20,7 @@ const schema: Schema = new Schema<ITraceTrail>(
   {
     endpoint: String,
     method: String,
-    timeTakenInMilliseconds: String,
+    timeTakenInMilliseconds: Number,
     input: {
       headers: Schema.Types.Mixed,
       params: Schema.Types.Mixed,

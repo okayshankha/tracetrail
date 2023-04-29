@@ -15,9 +15,11 @@
     "typeRoots": [
       "src/@types",
       "node_modules/@types",
-    ],
+    ]
   },
   "exclude": [
-    "examples/*"
+    "dist/**/*",
+    "examples/*",
+    "ui/*"
   ]
 }
