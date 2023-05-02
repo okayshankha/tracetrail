@@ -7,6 +7,8 @@ import server from './app/server'
 import Dayjs from 'dayjs';
 import { JSONObject } from './@types/json';
 
+const S = (payload: any) => JSON.parse(JSON.stringify(payload))
+
 let MONGO_MODEL: mongoose.Model<JSONObject>
 
 export class TraceTrail {
@@ -29,11 +31,10 @@ export class TraceTrail {
         res.__tracetrail_json = res?.json
         res.json = function (payload: JSONObject) {
             this.__tracetrail_requestOverview = {
-                endpoint: req.originalUrl,
-                method: req.method,
+                endpoint: req.originalUrl.toString(),
+                method: req.method.toString(),
                 input: {
                     headers: req.headers,
-                    params: req.params,
                     query: req.query,
                     body: req.body,
                 },
@@ -53,9 +54,10 @@ export class TraceTrail {
                 }
 
                 if (res.__tracetrail_requestOverview) {
+                    res.__tracetrail_requestOverview.statusCode = res.statusCode
                     const timeTakenInMilliseconds = Dayjs().diff(res.__tracetrail_started_at, 'milliseconds')
                     res.__tracetrail_requestOverview.timeTakenInMilliseconds = +timeTakenInMilliseconds
-                    await MONGO_MODEL.create(res.__tracetrail_requestOverview)
+                    await MONGO_MODEL.insertMany([S(res.__tracetrail_requestOverview)])
                 }
 
             } catch (error) {
