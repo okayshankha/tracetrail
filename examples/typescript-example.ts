@@ -5,7 +5,7 @@ import express from 'express'
 const app = express()
 const port = 4444
 
-const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail')
+const traceTrail = new TraceTrail('mongodb://192.168.0.100:27017/TraceTrail')
 
 app.use('/tracetrail', traceTrail.UI())
 app.use(traceTrail.MiddleWare)
