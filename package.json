@@ -1,6 +1,6 @@
 {
   "name": "tracetrail",
-  "version": "0.0.4a",
+  "version": "0.1.4",
   "description": "Debug APIs like a pro! Effortlessly record and identify input/output payloads.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -55,7 +55,7 @@
     "dayjs": "^1.11.7",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
-    "mongoose": "^7.0.4",
+    "mongoose": "^6.11.0",
     "on-finished": "^2.4.1",
     "rimraf": "^5.0.0",
     "winston": "^3.8.2"

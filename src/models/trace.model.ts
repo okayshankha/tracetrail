@@ -3,6 +3,7 @@ import { Connection, Document, Schema } from 'mongoose';
 interface ITraceTrail extends Document {
   endpoint: string
   method: string
+  statusCode: number
   timeTakenInMilliseconds: number
   input: {
     headers: any
@@ -20,6 +21,7 @@ const schema: Schema = new Schema<ITraceTrail>(
   {
     endpoint: String,
     method: String,
+    statusCode: Number,
     timeTakenInMilliseconds: Number,
     input: {
       headers: Schema.Types.Mixed,

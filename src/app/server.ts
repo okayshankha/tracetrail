@@ -1,5 +1,6 @@
 import path from 'path'
 import cors from 'cors'
+import _ from 'lodash'
 import express, { Request, Response } from 'express'
 import { Paginator } from './pagination.helper';
 
@@ -27,8 +28,15 @@ export default function (params: any) {
             itemsPerPage = 10,
         } = req.query
 
+        delete req.query.startIndex
+        delete req.query.itemsPerPage
+
         const result = await Paginator.Paginate({
             model: MONGO_MODEL,
+            query: _.omitBy(
+                req.query,
+                _.isNil
+            ),
             startIndex: +startIndex,
             itemsPerPage: +itemsPerPage,
             sort: {

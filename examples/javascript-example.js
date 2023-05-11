@@ -1,5 +1,5 @@
 
-import { TraceTrail } from 'tracetrail'
+const { TraceTrail } = require('../dist')
 const express = require('express')
 
 const app = express()
