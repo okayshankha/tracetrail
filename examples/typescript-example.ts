@@ -11,7 +11,7 @@ app.use('/tracetrail', traceTrail.UI())
 app.use(traceTrail.MiddleWare)
 
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     res.json({ Hello: 'World!' + Date.now() })
 })
 
