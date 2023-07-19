@@ -6,7 +6,8 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "ui"
+    "ui",
+    "install-react-ui.js"
   ],
   "keywords": [
     "express",
