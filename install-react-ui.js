@@ -1,0 +1,12 @@
+// install-react-ui.js
+const fs = require('fs');
+const { execSync } = require('child_process');
+
+const reactUiDir = 'react-ui';
+
+if (fs.existsSync(reactUiDir)) {
+  console.log(`Found '${reactUiDir}' directory. Installing dependencies...`);
+  execSync(`cd ${reactUiDir} && npm i --legacy-peer-deps --no-warnings`, { stdio: 'inherit' });
+} else {
+  console.log(`'${reactUiDir}' directory not found. Skipping postinstall script.`);
+}
