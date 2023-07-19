@@ -21,6 +21,7 @@
     "dist/**/*",
     "react-ui/*",
     "examples/*",
-    "ui/*"
+    "ui/*",
+    "install-react-ui.js"
   ]
 }
