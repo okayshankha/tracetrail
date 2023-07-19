@@ -1,0 +1,16 @@
+.preview-item {
+    word-break: break-all;
+}
+
+.preview-item:not(:last-child) {
+    border-bottom: 1px solid #2c2e33 !important;
+}
+
+.dropdown-item:hover {
+    color: rgb(235, 189, 1) !important;
+    font-weight: bold;
+}
+
+.dropdown-item {
+    cursor: pointer !important;
+}

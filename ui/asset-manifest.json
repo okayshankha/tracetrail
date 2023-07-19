@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.1971daf7.css",
-    "main.js": "./static/js/main.a2348b0c.js",
+    "main.css": "./static/css/main.029ea837.css",
+    "main.js": "./static/js/main.042bde55.js",
     "static/js/787.79954f03.chunk.js": "./static/js/787.79954f03.chunk.js",
     "static/media/Rubik-Medium.ttf": "./static/media/Rubik-Medium.4ddab52b8ff256c80834.ttf",
     "static/media/Rubik-Bold.ttf": "./static/media/Rubik-Bold.d6173c485abd77e07f4b.ttf",
@@ -9,12 +9,12 @@
     "static/media/Rubik-Light.ttf": "./static/media/Rubik-Light.8e4b01844ace913e46fc.ttf",
     "static/media/trailtrace-logo.png": "./static/media/trailtrace-logo.0dd567528cb8f02dedf8.png",
     "index.html": "./index.html",
-    "main.1971daf7.css.map": "./static/css/main.1971daf7.css.map",
-    "main.a2348b0c.js.map": "./static/js/main.a2348b0c.js.map",
+    "main.029ea837.css.map": "./static/css/main.029ea837.css.map",
+    "main.042bde55.js.map": "./static/js/main.042bde55.js.map",
     "787.79954f03.chunk.js.map": "./static/js/787.79954f03.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1971daf7.css",
-    "static/js/main.a2348b0c.js"
+    "static/css/main.029ea837.css",
+    "static/js/main.042bde55.js"
   ]
 }
