@@ -35,6 +35,7 @@ app.listen(port, () => {
 
 In order to get the inbuilt UI you an easily code it like this.
 
+![image](https://github.com/okayshankha/tracetrail/assets/30183032/f8e6164b-7026-4f34-9e27-503d36ceaeef)
 
 ``` javascript
 import { TraceTrail } from 'tracetrail'

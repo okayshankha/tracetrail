@@ -1,0 +1,19 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin: 0px;
+    height: 100dvh;
+}
+
+.logo {
+    margin: auto;
+    width: 125px;
+    margin-top: -16px;
+}
+
+.logo>img {
+    width: 100%;
+    height: auto;
+}

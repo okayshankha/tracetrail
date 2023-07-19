@@ -1,0 +1,5 @@
+.custom-card-height {
+    margin-top: 5px;
+    height: calc(100dvh - 270px);
+    overflow-y: scroll;
+}

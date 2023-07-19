@@ -4,6 +4,7 @@ import _ from 'lodash'
 import express, { Request, Response } from 'express'
 import { Paginator } from './pagination.helper';
 
+const ITEMS_PER_PAGE = 50
 
 export default function (params: any) {
 
@@ -25,7 +26,7 @@ export default function (params: any) {
 
         const {
             startIndex = 0,
-            itemsPerPage = 10,
+            itemsPerPage = ITEMS_PER_PAGE,
         } = req.query
 
         delete req.query.startIndex
