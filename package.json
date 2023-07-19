@@ -25,9 +25,10 @@
     "build": "rimraf ./dist && tsc -d && cd react-ui && npm run build",
     "lint": "eslint . --ext .ts --fix",
     "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1",
+    "release": "release-it",
     "test:ts": "ts-node examples/typescript-example.ts",
-    "test:js": "node examples/javascript-example.js"
+    "test:js": "node examples/javascript-example.js",
+    "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "eslint": "^8.38.0",
+    "release-it": "^16.1.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
@@ -59,7 +61,6 @@
     "mongoose": "^6.11.0",
     "on-finished": "^2.4.1",
     "rimraf": "^5.0.0",
-    "semantic-release": "^21.0.7",
     "winston": "^3.8.2"
   }
 }
