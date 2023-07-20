@@ -18,6 +18,8 @@ npm install tracetrail
 ```javascript
 import { TraceTrail } from 'tracetrail'
 import express from 'express'
+
+const port = 4444
 const app = express()
 
 // You can use a separate database to keep things neat and clean.
@@ -40,6 +42,8 @@ In order to get the inbuilt UI you an easily code it like this.
 ``` javascript
 import { TraceTrail } from 'tracetrail'
 import express from 'express'
+
+const port = 4444
 const app = express()
 
 // You can use a separate database to keep things neat and clean.
