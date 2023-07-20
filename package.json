@@ -1,6 +1,6 @@
 {
   "name": "tracetrail",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Debug APIs like a pro! Effortlessly record and identify input/output payloads.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
