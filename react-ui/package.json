@@ -41,6 +41,12 @@
     "vm2": "^3.9.17",
     "web-vitals": "^2.1.4"
   },
+  "overrides": {
+    "react-json-view": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "rm -r ../ui && react-scripts build && cp -r build ../ui && rm -r build",

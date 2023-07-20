@@ -21,7 +21,7 @@
     "logging"
   ],
   "scripts": {
-    "postinstall": "node install-react-ui.js",
+    "postinstall": "node install-react-ui",
     "start": "npm run build && node dist/index.js",
     "build": "rimraf ./dist && tsc -d && cd react-ui && npm run build",
     "lint": "eslint . --ext .ts --fix",

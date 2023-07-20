@@ -6,7 +6,7 @@ import {
     Selector as RequestLogsSelector
 } from '../../store/request-logs.store'
 import Icon from "@mdi/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import Api from "../../helpers/api";
 import MethodFilterDropdown from "./dropdowns/method.filter";
 import StatusCodeFilterDropdown from "./dropdowns/status-code.filter";
