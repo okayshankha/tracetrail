@@ -7,7 +7,7 @@
   "files": [
     "dist",
     "ui",
-    "install-react-ui.js"
+    "install-react-ui"
   ],
   "keywords": [
     "express",
