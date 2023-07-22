@@ -13,7 +13,12 @@ import StatusCodeFilterDropdown from "./dropdowns/status-code.filter";
 import _ from "lodash";
 
 
-const REFRESH_IN_SECONDS = 10
+
+sessionStorage.clear()
+
+
+const REFRESH_IN_SECONDS = 5
+const FETCH_DATA_IN_PROGRESS = (Math.random() + 1).toString(36).substring(7)
 
 const MethodFilterDropdownValues = {
     'ALL': '----ALL----',
@@ -44,6 +49,13 @@ export default function RequestList() {
 
 
     const FetchData = useCallback(async (startIndex: number = 1) => {
+
+        if (sessionStorage.getItem(FETCH_DATA_IN_PROGRESS) === 'true') {
+            return
+        }
+
+        sessionStorage.setItem(FETCH_DATA_IN_PROGRESS, 'true')
+
         Api({
             method: 'GET',
             endpoint: requestLogs.baseURL + requestLogs.endpoint,
@@ -63,7 +75,10 @@ export default function RequestList() {
             )
         }).catch((error: Error) => {
             console.log(error)
+        }).finally(() => {
+            sessionStorage.setItem(FETCH_DATA_IN_PROGRESS, 'false')
         })
+
     }, [dispatch, requestLogs.endpoint, requestLogs.dropdowns, requestLogs.baseURL])
 
 
