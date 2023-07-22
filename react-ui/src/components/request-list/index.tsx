@@ -1,5 +1,5 @@
 import ListItem from "./item";
-import { mdiArrowLeftBoldCircle, mdiArrowRightBoldCircle } from '@mdi/js';
+import { mdiArrowLeftBoldCircle, mdiArrowRightBoldCircle, mdiWifi, mdiWifiOff } from '@mdi/js';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
     Actions as RequestLogsActions,
@@ -114,6 +114,14 @@ export default function RequestList() {
                     <h4 className="card-title mb-1 display-4">Requests</h4>
 
                     <div className="float-right mt-1">
+
+                        {
+                            requestLogs.startIndex === 1
+                                ? <Icon path={mdiWifi} size={0.7} title={'Live'} />
+                                : <Icon path={mdiWifiOff} size={0.7} title={'Static'} />
+                        }
+
+
                         <button
                             className="btn p-1"
                             onClick={gotoPreviousPage}
