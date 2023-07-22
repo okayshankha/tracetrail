@@ -22,6 +22,6 @@
     "react-ui/*",
     "examples/*",
     "ui/*",
-    "install-react-ui.js"
+    "install-react-ui"
   ]
 }

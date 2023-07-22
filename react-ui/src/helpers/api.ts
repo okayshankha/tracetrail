@@ -32,9 +32,6 @@ export default async function Api(_params: {
         params = null
     } = _params
 
-    console.log(params);
-    
-
 
     const effectiveHeaders: { [key: string]: string } = {}
     if (headers) {

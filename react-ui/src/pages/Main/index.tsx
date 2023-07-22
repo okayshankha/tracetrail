@@ -13,7 +13,7 @@ export default function MainPage() {
                 <div className="col-lg-4 stretch-card mb-2">
                     <RequestList></RequestList>
                 </div>
-                <div className="col-lg-8 stretch-card">
+                <div className="col-lg-8 stretch-card mb-2">
                     <RequestDetails></RequestDetails>
                 </div>
             </div>
