@@ -29,8 +29,8 @@ export default function RequestDetails(props: any) {
                 <div className="card">
                     <div className="card-body">
                         <div className="row h-100 w-100">
-                            <div className="col-sm-12  w-100 h-100 d-table text-center">
-                                <div className="card card-block d-table-cell align-middle">
+                            <div className="col-sm-12 w-100 h-100 d-table text-center">
+                                <div className="d-table-cell align-middle">
                                     Nothing to show here
                                 </div>
                             </div>

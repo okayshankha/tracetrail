@@ -1,5 +1,5 @@
 import ListItem from "./item";
-import { mdiArrowLeftBoldCircle, mdiArrowRightBoldCircle } from '@mdi/js';
+import { mdiArrowLeftBoldCircle, mdiArrowRightBoldCircle, mdiWifi, mdiWifiOff } from '@mdi/js';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
     Actions as RequestLogsActions,
@@ -13,7 +13,12 @@ import StatusCodeFilterDropdown from "./dropdowns/status-code.filter";
 import _ from "lodash";
 
 
-const REFRESH_IN_SECONDS = 10
+
+sessionStorage.clear()
+
+
+const REFRESH_IN_SECONDS = 5
+const FETCH_DATA_IN_PROGRESS = (Math.random() + 1).toString(36).substring(7)
 
 const MethodFilterDropdownValues = {
     'ALL': '----ALL----',
@@ -44,6 +49,13 @@ export default function RequestList() {
 
 
     const FetchData = useCallback(async (startIndex: number = 1) => {
+
+        if (sessionStorage.getItem(FETCH_DATA_IN_PROGRESS) === 'true') {
+            return
+        }
+
+        sessionStorage.setItem(FETCH_DATA_IN_PROGRESS, 'true')
+
         Api({
             method: 'GET',
             endpoint: requestLogs.baseURL + requestLogs.endpoint,
@@ -63,7 +75,10 @@ export default function RequestList() {
             )
         }).catch((error: Error) => {
             console.log(error)
+        }).finally(() => {
+            sessionStorage.setItem(FETCH_DATA_IN_PROGRESS, 'false')
         })
+
     }, [dispatch, requestLogs.endpoint, requestLogs.dropdowns, requestLogs.baseURL])
 
 
@@ -99,6 +114,14 @@ export default function RequestList() {
                     <h4 className="card-title mb-1 display-4">Requests</h4>
 
                     <div className="float-right mt-1">
+
+                        {
+                            requestLogs.startIndex === 1
+                                ? <Icon path={mdiWifi} size={0.7} title={'Live'} />
+                                : <Icon path={mdiWifiOff} size={0.7} title={'Static'} />
+                        }
+
+
                         <button
                             className="btn p-1"
                             onClick={gotoPreviousPage}

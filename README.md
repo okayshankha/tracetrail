@@ -61,5 +61,36 @@ app.listen(port, () => {
 ```
 
 
+## Developers Guide
+
+If you want to setup the project in your local follow these steps:
+
+- Terminal #1
+  - Clone the repository
+  - Run following command ```npm i```
+  - Goto the examples folder and pick any file of your choice JavaScript one or TypeScript one.
+  - Update the MongoDB url.
+  - Then open a terminal in the root directory.
+  - To run the Server written in JavaScript run ```npm run example:js``` 
+  - Or to run the Server written in TypeScript run ```npm run example:ts```
+
+---
+
+- Terminal #2
+  - Run ```cd react-ui && npm start``` it will start the React App in development mode.
+  - Now you will find one find inside react-ui ```.env.development.local``` modify the value of ```REACT_APP_API_BASE_URL``` only if you have changed the server port in ```examples/javascript-example.js``` or ```examples/typescript-example.ts```. 
+  - If you are not sure leave ```REACT_APP_API_BASE_URL``` as it is.
 
 
+---
+
+That's it, you are not set. Now you can open your browser and open ```http:localhost:3000``` it will open TraceTrail UI.
+
+
+---
+
+# Future Scope
+- Login page for access authorization
+- Socket.io implementation for realtime data fetch
+- Support multiple database
+- Write test cases
