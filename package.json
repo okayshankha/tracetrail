@@ -64,10 +64,5 @@
     "on-finished": "^2.4.1",
     "rimraf": "^5.0.0",
     "winston": "^3.8.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"[Husky] pre-commit\""
-    }
   }
 }
