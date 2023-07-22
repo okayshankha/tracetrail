@@ -5,6 +5,7 @@ logs
 # Build files
 build/
 dist/
+ui/
 *.d.ts
 *.js.map
 
