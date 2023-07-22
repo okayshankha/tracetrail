@@ -26,6 +26,7 @@
     "build": "rimraf ./dist && tsc -d && cd react-ui && npm run build",
     "lint": "eslint . --ext .ts --fix",
     "release": "release-it",
+    "prepublishOnly": "npm run build",
     "example:ts": "ts-node examples/typescript-example.ts",
     "example:js": "node examples/javascript-example.js",
     "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1",

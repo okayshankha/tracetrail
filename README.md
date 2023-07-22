@@ -92,4 +92,5 @@ That's it, you are not set. Now you can open your browser and open ```http:local
 # Future Scope
 - Login page for access authorization
 - Socket.io implementation for realtime data fetch
-- Support multiple database.
+- Support multiple database
+- Write test cases
