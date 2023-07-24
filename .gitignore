@@ -6,7 +6,6 @@ logs
 build/
 dist/
 ui/
-*.d.ts
 *.js.map
 
 # Dependency directories
