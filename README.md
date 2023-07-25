@@ -25,7 +25,7 @@ const app = express()
 // You can use a separate database to keep things neat and clean.
 const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail')
 
-// You need to use traceTrail.MiddleWare to make this package working.
+// You need to use traceTrail.MiddleWare to make this package work.
 app.use(traceTrail.MiddleWare)
 
 app.listen(port, () => {
@@ -35,7 +35,7 @@ app.listen(port, () => {
 
 ## UI
 
-In order to get the inbuilt UI you an easily code it like this.
+To get the inbuilt UI you can easily code it like this.
 
 ![image](https://i.imgur.com/YlfNMzF.jpeg)
 
@@ -52,7 +52,7 @@ const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail')
 // Get the UI
 app.use('/tracetrail', traceTrail.UI())
 
-// You need to use traceTrail.MiddleWare to make this package working.
+// You need to use traceTrail.MiddleWare to make this package work.
 app.use(traceTrail.MiddleWare)
 
 app.listen(port, () => {
@@ -63,12 +63,13 @@ app.listen(port, () => {
 
 ## Developers Guide
 
-If you want to setup the project in your local follow these steps:
+If you want to set up the project in your local follow these steps:
 
 - Terminal #1
   - Clone the repository
   - Run following command ```npm i```
-  - Goto the examples folder and pick any file of your choice JavaScript one or TypeScript one.
+  - Now run ```npm run build```
+  - Go to the examples folder and pick any file of your choice JavaScript one or TypeScript one.
   - Update the MongoDB url.
   - Then open a terminal in the root directory.
   - To run the Server written in JavaScript run ```npm run example:js``` 
@@ -84,13 +85,16 @@ If you want to setup the project in your local follow these steps:
 
 ---
 
-That's it, you are not set. Now you can open your browser and open ```http:localhost:3000``` it will open TraceTrail UI.
+That's it, you are all set. Now you can open your browser and open ```http//:localhost:3000``` it will open TraceTrail UI.
 
+If you haven't changed any ports, then the following would be true.
+- Backend Server: ```http//:localhost:4444```
+- React Front End: ```http//:localhost:3000```
 
 ---
 
 # Future Scope
 - Login page for access authorization
-- Socket.io implementation for realtime data fetch
-- Support multiple database
+- Socket.io implementation for real-time data fetch
+- Support multiple databases
 - Write test cases
