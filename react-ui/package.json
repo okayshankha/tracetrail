@@ -52,6 +52,7 @@
   "scripts": {
     "start": "react-scripts start",
     "audit": "npm audit fix --omit=dev",
+    "lint": "eslint --fix ./src",
     "build": "rimraf ../ui && react-scripts build && cp -r build ../ui && rm -r build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -77,6 +78,9 @@
   "devDependencies": {
     "@types/lodash": "^4.14.194",
     "@types/prismjs": "^1.26.0",
-    "@types/react-syntax-highlighter": "^15.5.6"
+    "@types/react-syntax-highlighter": "^15.5.6",
+    "eslint": "^8.45.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0"
   }
 }

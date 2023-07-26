@@ -1,1 +1,1 @@
-declare module 'generate-schema';
+declare module 'generate-schema'

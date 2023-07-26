@@ -1,1 +1,1 @@
-declare module 'safer-eval';
+declare module 'safer-eval'

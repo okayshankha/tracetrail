@@ -1,39 +1,37 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../app/store';
-
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '../app/store'
 
 export interface RequestLogState {
-  lastUpdated: number,
-  prevStartIndex: number,
-  startIndex: number,
-  itemsPerPage: number,
-  totalItems: number,
-  selectedRecord: any,
-  baseURL: string,
-  endpoint: string,
-  records: any[],
+  lastUpdated: number
+  prevStartIndex: number
+  startIndex: number
+  itemsPerPage: number
+  totalItems: number
+  selectedRecord: any
+  baseURL: string
+  endpoint: string
+  records: any[]
   dropdowns: {
     methodFilter: {
-      visible: boolean,
-      value: String,
-    },
+      visible: boolean
+      value: string
+    }
     statusCodeFilter: {
-      visible: boolean,
-      value: string,
-    },
+      visible: boolean
+      value: string
+    }
   }
 }
 
 /**
- * 
+ *
  * If you need specific endpoint for local development,
  * create .env in the project root folder and add the following line
- * 
+ *
  * REACT_APP_API_BASE_URL=http://localhost:4444/tracetrail/
- * 
- */ 
+ *
+ */
 const BASE_URL = process.env.REACT_APP_API_BASE_URL ?? ''
-
 
 const initialState: RequestLogState = {
   lastUpdated: Date.now(),
@@ -54,26 +52,23 @@ const initialState: RequestLogState = {
       value: 'ALL',
     },
   },
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
 }
 
-
 export function FindRecordById(records: any[], id: string) {
-  const existingRecord: { index: number, record: any } | undefined = records.find(
-    (e, index) => {
+  const existingRecord: { index: number; record: any } | undefined =
+    records.find((e, index) => {
       if (e._id === id) {
         return {
           index,
-          record: e
+          record: e,
         }
       } else {
         return null
       }
-    }
-  )
+    })
   return existingRecord
 }
-
 
 export const RequestLogsSlice = createSlice({
   name: 'RequestLogs',
@@ -86,8 +81,6 @@ export const RequestLogsSlice = createSlice({
       state.startIndex = state.startIndex - state.itemsPerPage
     },
 
-
-
     AddRecords: (state, action: PayloadAction<any>) => {
       const { startIndex, itemsPerPage, totalItems, records } = action.payload
       state.records = records
@@ -95,7 +88,6 @@ export const RequestLogsSlice = createSlice({
       state.totalItems = totalItems
       state.itemsPerPage = itemsPerPage
       state.lastUpdated = Date.now()
-
 
       if (records.length > 0) {
         state.prevStartIndex = state.startIndex
@@ -109,8 +101,10 @@ export const RequestLogsSlice = createSlice({
       state.selectedRecord = FindRecordById(state.records, _request)
     },
 
-
-    SetMethodFilterDropdownVisibility: (state, action: PayloadAction<boolean>) => {
+    SetMethodFilterDropdownVisibility: (
+      state,
+      action: PayloadAction<boolean>,
+    ) => {
       state.dropdowns.methodFilter.visible = action.payload
     },
     SetMethodFilterDropdown: (state, action: PayloadAction<string>) => {
@@ -118,20 +112,18 @@ export const RequestLogsSlice = createSlice({
       state.dropdowns.methodFilter.value = action.payload
     },
 
-
-    SetStatusCodeFilterDropdownVisibility: (state, action: PayloadAction<boolean>) => {
+    SetStatusCodeFilterDropdownVisibility: (
+      state,
+      action: PayloadAction<boolean>,
+    ) => {
       state.dropdowns.statusCodeFilter.visible = action.payload
     },
     SetStatusCodeFilterDropdown: (state, action: PayloadAction<string>) => {
       state.startIndex = 1
       state.dropdowns.statusCodeFilter.value = action.payload
     },
-
-
-
-
   },
-});
+})
 
 export const Actions = RequestLogsSlice.actions
 

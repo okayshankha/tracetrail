@@ -11,12 +11,27 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "no-console": 2,
+    "no-console": 0,
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": 0,
-    "semi": [2, "never"],
-    "quotes": [2, "single", "avoid-escape"],
+    "semi": [
+      2,
+      "never"
+    ],
+    "quotes": [
+      2,
+      "single",
+      "avoid-escape"
+    ],
     "prettier/prettier": "error",
     "eqeqeq": 0
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.tsx",
+        "*.ts"
+      ]
+    }
+  ]
 }
