@@ -2,6 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../app/store'
 
 export interface RequestLogState {
+  npm: {
+    npmUrl: string
+    registryUrl: string
+    showVersionUpdateBanner: boolean
+    currentPackageVersion: string | null
+    latestPackageVersion: string | null
+  }
   lastUpdated: number
   prevStartIndex: number
   startIndex: number
@@ -34,6 +41,13 @@ export interface RequestLogState {
 const BASE_URL = process.env.REACT_APP_API_BASE_URL ?? ''
 
 const initialState: RequestLogState = {
+  npm: {
+    npmUrl: 'https://www.npmjs.com/package/tracetrail',
+    registryUrl: 'https://registry.npmjs.org/tracetrail/latest',
+    showVersionUpdateBanner: false,
+    currentPackageVersion: null,
+    latestPackageVersion: null,
+  },
   lastUpdated: Date.now(),
   prevStartIndex: 1,
   startIndex: 1,
@@ -82,12 +96,20 @@ export const RequestLogsSlice = createSlice({
     },
 
     AddRecords: (state, action: PayloadAction<any>) => {
-      const { startIndex, itemsPerPage, totalItems, records } = action.payload
+      const { startIndex, itemsPerPage, totalItems, records, version } =
+        action.payload
       state.records = records
       state.startIndex = startIndex
       state.totalItems = totalItems
       state.itemsPerPage = itemsPerPage
       state.lastUpdated = Date.now()
+
+      console.log(version)
+      state.npm.currentPackageVersion = version
+      if (state.npm.latestPackageVersion) {
+        state.npm.showVersionUpdateBanner =
+          state.npm.currentPackageVersion !== state.npm.latestPackageVersion
+      }
 
       if (records.length > 0) {
         state.prevStartIndex = state.startIndex
@@ -121,6 +143,14 @@ export const RequestLogsSlice = createSlice({
     SetStatusCodeFilterDropdown: (state, action: PayloadAction<string>) => {
       state.startIndex = 1
       state.dropdowns.statusCodeFilter.value = action.payload
+    },
+
+    SetLatestPackageVersion: (state, action: PayloadAction<string>) => {
+      state.npm.latestPackageVersion = action.payload
+      if (state.npm.currentPackageVersion) {
+        state.npm.showVersionUpdateBanner =
+          state.npm.currentPackageVersion !== state.npm.latestPackageVersion
+      }
     },
   },
 })

@@ -3,11 +3,18 @@ import cors from 'cors'
 import _ from 'lodash'
 import express, { Request, Response } from 'express'
 import { Paginator } from './pagination.helper'
+import { readFileSync } from 'fs'
 
 const ITEMS_PER_PAGE = 50
 
 export default function (params: any) {
   const { MONGO_MODEL } = params
+
+  const { version } = JSON.parse(
+    readFileSync(
+      path.resolve(__dirname, '../../') + '/package.json',
+    ).toString(),
+  )
 
   const app = express()
   app.use(cors())
@@ -37,6 +44,7 @@ export default function (params: any) {
 
     return res.json({
       message: 'Requests fetched successfully.',
+      version,
       ...result,
     })
   })
