@@ -1,1 +1,1 @@
-declare module 'react-json-view';
+declare module 'react-json-view'
