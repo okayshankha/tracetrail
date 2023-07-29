@@ -104,7 +104,6 @@ export const RequestLogsSlice = createSlice({
       state.itemsPerPage = itemsPerPage
       state.lastUpdated = Date.now()
 
-      console.log(version)
       state.npm.currentPackageVersion = version
       if (state.npm.latestPackageVersion) {
         state.npm.showVersionUpdateBanner =
