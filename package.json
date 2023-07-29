@@ -1,6 +1,6 @@
 {
   "name": "tracetrail",
-  "version": "1.0.8",
+  "version": "1.1.1",
   "description": "Debug APIs like a pro! Effortlessly record and identify input/output payloads.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -37,7 +37,7 @@
     "url": "git+https://github.com/okayshankha/tracetrail.git"
   },
   "author": "Shankhadeep Das",
-  "license": "Apache-2.0",
+  "license": "GNU AGPLv3",
   "bugs": {
     "url": "https://github.com/okayshankha/tracetrail/issues"
   },

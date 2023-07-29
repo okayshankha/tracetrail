@@ -80,6 +80,7 @@ export default function RequestList() {
               itemsPerPage: requestLogList.itemsPerPage,
               totalItems: requestLogList.totalItems,
               records: requestLogList.items,
+              version: requestLogList.version,
             }),
           )
         })
