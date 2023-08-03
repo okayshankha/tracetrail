@@ -4,6 +4,7 @@ import _ from 'lodash'
 import express, { Request, Response } from 'express'
 import { Paginator } from './pagination.helper'
 import { readFileSync } from 'fs'
+import { spawn } from 'child_process'
 
 const ITEMS_PER_PAGE = 50
 
@@ -19,12 +20,7 @@ export default function (params: any) {
   const app = express()
   app.use(cors())
 
-  app.use(express.static(path.join(__dirname, '../../ui')))
-
-  // Handle requests to the sub-route
-  app.get('/', (_req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../ui', 'index.html'))
-  })
+  /* app.use(express.static(path.join(__dirname, '../../ui'))) */
 
   app.get('/api/requests', async (req: Request, res: Response) => {
     const { startIndex = 0, itemsPerPage = ITEMS_PER_PAGE } = req.query
@@ -48,6 +44,32 @@ export default function (params: any) {
       ...result,
     })
   })
+
+  // Handle requests to the sub-route
+  if (process.env.TRACETRAIL_ENV === 'DEV') {
+    const DEFAULT_REACT_APP_PORT = 3000
+    const reactAppPort =
+      process.env.REACT_APP_PORT ?? `${DEFAULT_REACT_APP_PORT}`
+    const reactAppHandle = spawn('bash', [
+      '-c',
+      `cd ./react-ui && PORT=${reactAppPort} npm start`,
+    ])
+    reactAppHandle.stderr.pipe(process.stderr)
+    reactAppHandle.stdout.pipe(process.stdout)
+    reactAppHandle.on('exit', (code) => {
+      throw new Error('REACT APP exited with code ' + code)
+    })
+    process.on('exit', () => {
+      reactAppHandle.kill()
+    })
+    app.use('/', (_req, res) =>
+      res.redirect('http://localhost:' + reactAppPort),
+    )
+  } else {
+    app.get('/', (_req: Request, res: Response) => {
+      res.sendFile(path.join(__dirname, '../../ui', 'index.html'))
+    })
+  }
 
   return app
 }
