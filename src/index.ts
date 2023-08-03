@@ -2,23 +2,43 @@ import { Request, Response, NextFunction } from 'express'
 import OnFinished from 'on-finished'
 import TrailTraceModel from './models/trace.model'
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 import { Logger } from './core/logger'
 import server from './app/server'
 import Dayjs from 'dayjs'
 import { JSONObject } from './@types/json'
 
 const S = (payload: any) => JSON.parse(JSON.stringify(payload))
+const DEFAULT_SALT_ROUNDS = 12
 
 let MONGO_MODEL: mongoose.Model<JSONObject>
 
 export class TraceTrail {
+  private __PasswordHash: string
+  private __PvtKeySecret: string
+
   constructor(
     DB_CONNECTION_STRING: string,
-    DB_CONNECTION_OPTIONS: JSONObject = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    OPTIONS: {
+      LOGIN_PASSWORD: string
+      PVT_KEY_SECRET: string
+      DB_CONNECTION_OPTIONS?: JSONObject
+      SALT_ROUNDS?: number
     },
   ) {
+    const {
+      LOGIN_PASSWORD,
+      PVT_KEY_SECRET,
+      DB_CONNECTION_OPTIONS = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+      SALT_ROUNDS = DEFAULT_SALT_ROUNDS,
+    } = OPTIONS
+
+    this.__PasswordHash = bcrypt.hashSync(LOGIN_PASSWORD, SALT_ROUNDS)
+    this.__PvtKeySecret = PVT_KEY_SECRET
+
     if (!MONGO_MODEL) {
       const MONGO_CONN = mongoose.createConnection(
         DB_CONNECTION_STRING,
@@ -76,6 +96,7 @@ export class TraceTrail {
   UI() {
     return server({
       MONGO_MODEL,
+      PASSWORD_HASH: this.__PasswordHash,
     })
   }
 }

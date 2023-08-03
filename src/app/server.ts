@@ -2,14 +2,22 @@ import path from 'path'
 import cors from 'cors'
 import _ from 'lodash'
 import express, { Request, Response } from 'express'
+import bcrypt from 'bcrypt'
 import { Paginator } from './pagination.helper'
 import { readFileSync } from 'fs'
 import { spawn } from 'child_process'
+import mongoose from 'mongoose'
+import { JSONObject } from '../@types/json'
+
+interface ServerCreationParams {
+  MONGO_MODEL: mongoose.Model<JSONObject>
+  PASSWORD_HASH: string
+}
 
 const ITEMS_PER_PAGE = 50
 
-export default function (params: any) {
-  const { MONGO_MODEL } = params
+export default function (params: ServerCreationParams) {
+  const { MONGO_MODEL, PASSWORD_HASH } = params
 
   const { version } = JSON.parse(
     readFileSync(
@@ -21,6 +29,18 @@ export default function (params: any) {
   app.use(cors())
 
   /* app.use(express.static(path.join(__dirname, '../../ui'))) */
+
+  app.post('/sign-in', async (req: Request, res: Response) => {
+    const { password } = req.body ?? {}
+    if (!password) {
+      return res.status(400).json({
+        message: 'Password is required, but not provided in request.',
+        hasError: true,
+      })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, PASSWORD_HASH)
+  })
 
   app.get('/api/requests', async (req: Request, res: Response) => {
     const { startIndex = 0, itemsPerPage = ITEMS_PER_PAGE } = req.query

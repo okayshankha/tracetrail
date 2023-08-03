@@ -7,10 +7,15 @@ import { Logger } from '../src/core/logger'
 const app = Express()
 
 const dbUrl = process.env.DB_URL
+const saltRounds = parseInt(process.env.SALT_ROUNDS as string)
 if (!dbUrl) {
   throw new Error('Database connection URL missing in `.env`')
 }
-const traceTrail = new TraceTrail(dbUrl)
+const traceTrail = new TraceTrail(dbUrl, {
+  SALT_ROUNDS: !Number.isNaN(saltRounds) ? saltRounds : undefined,
+  LOGIN_PASSWORD: process.env.LOGIN_PASSWORD as string,
+  PVT_KEY_SECRET: process.env.PVT_KEY_SECRET as string,
+})
 // Get the UI
 app.use('/tracetrail', traceTrail.UI())
 
