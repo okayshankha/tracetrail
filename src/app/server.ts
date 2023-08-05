@@ -8,22 +8,36 @@ import { readFileSync } from 'fs'
 import { spawn } from 'child_process'
 import mongoose from 'mongoose'
 import { JSONObject } from '../@types/json'
+import JWTHelper, { IJWTHelperConstructorP } from './jwt.helper'
 
-interface ServerCreationParams {
+interface IServerCreationP {
   MONGO_MODEL: mongoose.Model<JSONObject>
-  PASSWORD_HASH: string
+  LOGIN_PASSWORD: string
+  SALT_ROUNDS?: number
 }
 
-const ITEMS_PER_PAGE = 50
+export type TServerCreationP = IServerCreationP & IJWTHelperConstructorP
 
-export default function (params: ServerCreationParams) {
-  const { MONGO_MODEL, PASSWORD_HASH } = params
+const ITEMS_PER_PAGE = 50
+const DEFAULT_SALT_ROUNDS = 12
+
+export default function (params: TServerCreationP) {
+  const {
+    MONGO_MODEL,
+    LOGIN_PASSWORD,
+    PVT_KEY_SECRET,
+    JWT_EXPIRY_SECS,
+    SALT_ROUNDS = DEFAULT_SALT_ROUNDS,
+  } = params
+  const PASSWORD_HASH = bcrypt.hashSync(LOGIN_PASSWORD, SALT_ROUNDS)
 
   const { version } = JSON.parse(
     readFileSync(
       path.resolve(__dirname, '../../') + '/package.json',
     ).toString(),
   )
+
+  const jwtHelper = new JWTHelper({ PVT_KEY_SECRET, JWT_EXPIRY_SECS })
 
   const app = express()
   app.use(cors())
@@ -40,9 +54,41 @@ export default function (params: ServerCreationParams) {
     }
 
     const isPasswordValid = await bcrypt.compare(password, PASSWORD_HASH)
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message: 'Invalid Password.',
+        hasError: true,
+      })
+    }
+
+    const token = jwtHelper.GenerateToken()
+
+    // Issue JWT to the user
+    return res.status(200).json({
+      message: 'Login Successful.',
+      token,
+    })
   })
 
   app.get('/api/requests', async (req: Request, res: Response) => {
+    const bearerToken = req.headers.authorization
+    if (!bearerToken) {
+      return res.status(401).json({
+        message: 'Unauthorized.',
+        hasError: true,
+      })
+    }
+    const token = bearerToken.split(' ')[1]
+    const jwtPayload = jwtHelper.VerifyToken(token)
+
+    if (jwtPayload === null) {
+      return res.status(401).json({
+        message: 'Unauthorized.',
+        hasError: true,
+      })
+    }
+
     const { startIndex = 0, itemsPerPage = ITEMS_PER_PAGE } = req.query
 
     delete req.query.startIndex
