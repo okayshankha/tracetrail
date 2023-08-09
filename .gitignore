@@ -30,3 +30,8 @@ node_modules/
 
 # Output of 'npm pack'
 *.tgz
+
+# Environment files
+.env
+
+.tracetrail
