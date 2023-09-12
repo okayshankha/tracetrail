@@ -17,6 +17,7 @@ export interface RequestLogState {
   selectedRecord: any
   baseURL: string
   endpoint: string
+  loginEndpoint: string
   records: any[]
   dropdowns: {
     methodFilter: {
@@ -56,6 +57,7 @@ const initialState: RequestLogState = {
   selectedRecord: null,
   records: [],
   endpoint: 'api/requests',
+  loginEndpoint: 'api/sign-in',
   dropdowns: {
     methodFilter: {
       visible: false,

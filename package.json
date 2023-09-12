@@ -31,7 +31,7 @@
     "example:js": "node examples/javascript-example.js",
     "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1",
     "prepare": "husky install",
-    "start:dev": "nodemon --ext js,ts --exec ts-node -r tsconfig-paths/register -- ./dev/index.ts"
+    "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register -- ./dev/index.ts"
   },
   "repository": {
     "type": "git",
