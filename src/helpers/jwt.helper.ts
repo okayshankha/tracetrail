@@ -1,30 +1,31 @@
 import { resolve } from 'path'
+import fs from 'fs'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { generateKeyPairSync } from 'crypto'
+import crypto from 'crypto'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { Logger } from '../core/logger'
 
-export interface IJWTHelperConstructorP {
-  PVT_KEY_SECRET: string
+export interface IJwtHelperConstructorPayload {
+  SECRET_KEY?: string
   JWT_EXPIRY_SECS?: number
 }
 
 const DEFAULT_JWT_EXPIRY_SECS = 60 * 60
 
 export default class JWTHelper {
-  private PVT_KEY_SECRET: string
+  private SECRET_KEY: string
   private JWT_EXPIRY_SECS: number
-  private keyDir = resolve(`${process.cwd()}/.tracetrail/keys`)
+  private keyDir = resolve(__dirname, '..', '..', '.tracetrail/keys')
   private publicKeyPath = resolve(`${this.keyDir}/rsa.pub`)
   private privateKeyPath = resolve(`${this.keyDir}/rsa`)
   private publicKey: Buffer
   private privateKey: Buffer
 
   constructor({
-    PVT_KEY_SECRET,
+    SECRET_KEY = `SECRET_KEY_${Math.random().toString()}`,
     JWT_EXPIRY_SECS = DEFAULT_JWT_EXPIRY_SECS,
-  }: IJWTHelperConstructorP) {
-    this.PVT_KEY_SECRET = PVT_KEY_SECRET
+  }: IJwtHelperConstructorPayload) {
+    this.SECRET_KEY = SECRET_KEY
     this.JWT_EXPIRY_SECS = JWT_EXPIRY_SECS
     this.GenerateKeys()
     this.publicKey = readFileSync(this.publicKeyPath)
@@ -41,8 +42,8 @@ export default class JWTHelper {
       return jwt.verify(token, this.publicKey, {
         algorithms: ['RS256'],
       }) as JwtPayload // Payload of jwt in this library would be valid standard object and not string.
-    } catch (error) {
-      Logger.error(error)
+    } catch (error: any) {
+      Logger.error(error?.message ?? error)
     }
     return null
   }
@@ -53,8 +54,8 @@ export default class JWTHelper {
    */
   GenerateToken(): string {
     return jwt.sign(
-      Math.random().toString(),
-      { key: this.privateKey, passphrase: this.PVT_KEY_SECRET },
+      { key: Math.random().toString() },
+      { key: this.privateKey, passphrase: this.SECRET_KEY },
       {
         algorithm: 'RS256',
         expiresIn: this.JWT_EXPIRY_SECS,
@@ -66,13 +67,13 @@ export default class JWTHelper {
    * Generates RSA Key Pairs for JWT authentication
    * It will generate the keys only if the keys are not present.
    */
-  GenerateKeys(): void {
+  GenerateKeys(retryCount = 0): void {
     try {
       const keyDir = this.keyDir
       const publicKeyPath = this.publicKeyPath
       const privateKeyPath = this.privateKeyPath
 
-      const JWT_SECRET = this.PVT_KEY_SECRET
+      const JWT_SECRET = this.SECRET_KEY
 
       // Throw error if JWT_SECRET is not set
       if (!JWT_SECRET) {
@@ -86,7 +87,7 @@ export default class JWTHelper {
 
       // Check if PUBLIC and PRIVATE KEY exists else generate new
       if (!existsSync(publicKeyPath) || !existsSync(privateKeyPath)) {
-        const result = generateKeyPairSync('rsa', {
+        const result = crypto.generateKeyPairSync('rsa', {
           modulusLength: 2048,
           publicKeyEncoding: {
             type: 'spki',
@@ -101,12 +102,48 @@ export default class JWTHelper {
         })
 
         const { publicKey, privateKey } = result
-        writeFileSync(`${keyDir}/rsa.pub`, publicKey, { flag: 'wx' })
-        writeFileSync(`${keyDir}/rsa`, privateKey, { flag: 'wx' })
-        Logger.warn('New public and private key generated.')
+        writeFileSync(publicKeyPath, publicKey, { flag: 'wx' })
+        writeFileSync(privateKeyPath, privateKey, { flag: 'wx' })
+        Logger.warn(
+          "New RSA key-pair has been generated. Don't worry, no action is needed from your end.",
+        )
+      }
+
+      if (!VerifyExistingRSA(this.SECRET_KEY, privateKeyPath)) {
+        fs.unlinkSync(publicKeyPath)
+        fs.unlinkSync(privateKeyPath)
+
+        if (retryCount < 5) {
+          this.GenerateKeys(++retryCount)
+        }
       }
     } catch (error) {
       Logger.error(error)
     }
+  }
+}
+
+function VerifyExistingRSA(passphrase: string, privateKeyPath: string) {
+  try {
+    if (!existsSync(privateKeyPath)) {
+      const errorMessage =
+        "Private key doesn't exists in the specified path! If this issue persists then find a folder named .tracetrail in your root directory and delete it."
+      Logger.warn(errorMessage)
+      throw Error(errorMessage)
+    }
+
+    const encryptedPrivateKey = fs.readFileSync(privateKeyPath).toString()
+
+    // Attempt to decrypt the private key with the passphrase
+    crypto.createPrivateKey({
+      key: encryptedPrivateKey,
+      format: 'pem',
+      passphrase,
+    })
+
+    return true
+  } catch (error) {
+    // If decryption fails, the passphrase is not valid
+    return false
   }
 }

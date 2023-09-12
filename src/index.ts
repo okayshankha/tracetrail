@@ -3,7 +3,7 @@ import OnFinished from 'on-finished'
 import TrailTraceModel from './models/trace.model'
 import mongoose from 'mongoose'
 import { Logger } from './core/logger'
-import server, { TServerCreationP } from './app/server'
+import server, { TServerCreationPayload } from './app/server'
 import Dayjs from 'dayjs'
 import { JSONObject } from './@types/json'
 
@@ -79,7 +79,7 @@ export class TraceTrail {
     next()
   }
 
-  UI(params: Omit<TServerCreationP, 'MONGO_MODEL'>) {
+  UI(params?: Omit<TServerCreationPayload, 'MONGO_MODEL'>) {
     return server({
       MONGO_MODEL,
       ...params,
