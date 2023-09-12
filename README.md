@@ -37,7 +37,7 @@ app.listen(port, () => {
 
 To get the inbuilt UI you can easily code it like this.
 
-![image](https://i.imgur.com/YlfNMzF.jpeg)
+![image](https://i.imgur.com/xtUuRCe.jpg)
 
 ``` javascript
 import { TraceTrail } from 'tracetrail'
@@ -68,33 +68,29 @@ If you want to set up the project in your local follow these steps:
 - Terminal #1
   - Clone the repository
   - Run following command ```npm i```
-  - Now run ```npm run build```
+  - Create .env file and add the following bare minimum environment variables
+    
+    ```shell
+    DB_URL=mongodb:/localhost:27017/TraceTrail
+    PORT=7777
+    TRACETRAIL_ENV=DEV
+    ```
+
+  - Now run ```npm run dev```
   - Go to the examples folder and pick any file of your choice JavaScript one or TypeScript one.
-  - Update the MongoDB url.
-  - Then open a terminal in the root directory.
-  - To run the Server written in JavaScript run ```npm run example:js``` 
-  - Or to run the Server written in TypeScript run ```npm run example:ts```
-
+  - Make sure to update the MongoDB url.
 ---
 
-- Terminal #2
-  - Run ```cd react-ui && npm start``` it will start the React App in development mode.
-  - Now you will find one find inside react-ui ```.env.development.local``` modify the value of ```REACT_APP_API_BASE_URL``` only if you have changed the server port in ```examples/javascript-example.js``` or ```examples/typescript-example.ts```. 
-  - If you are not sure leave ```REACT_APP_API_BASE_URL``` as it is.
-
-
----
-
-That's it, you are all set. Now you can open your browser and open ```http//:localhost:3000``` it will open TraceTrail UI.
+That's it, you are all set. Now you can open your browser and open ```http//:localhost:7777/tracetrail``` it will open TraceTrail UI.
 
 If you haven't changed any ports, then the following would be true.
-- Backend Server: ```http//:localhost:4444```
-- React Front End: ```http//:localhost:3000```
+- Backend Server: ```http//:localhost:7777```
+- React Front End: ```http//:localhost:7778```
 
 ---
 
 # Future Scope
-- Login page for access authorization
-- Socket.io implementation for real-time data fetch
-- Support multiple databases
+- [done] - Login page for access authorization
 - Write test cases
+- [on-hold] - Socket.io implementation for real-time data fetch
+- [on-hold] - Support multiple databases

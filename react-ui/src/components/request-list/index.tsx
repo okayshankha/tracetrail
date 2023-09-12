@@ -15,6 +15,7 @@ import { useCallback, useEffect } from 'react'
 import Api from '../../helpers/api'
 import MethodFilterDropdown from './dropdowns/method.filter'
 import StatusCodeFilterDropdown from './dropdowns/status-code.filter'
+import { useNavigate } from 'react-router-dom'
 import _ from 'lodash'
 
 sessionStorage.clear()
@@ -32,6 +33,8 @@ const MethodFilterDropdownValues = {
 }
 
 export default function RequestList() {
+  const navigate = useNavigate()
+
   const requestLogs = useAppSelector(RequestLogsSelector)
   const dispatch = useAppDispatch()
 
@@ -58,6 +61,9 @@ export default function RequestList() {
       Api({
         method: 'GET',
         endpoint: requestLogs.baseURL + requestLogs.endpoint,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
         params: _.omitBy(
           {
             startIndex,
@@ -74,6 +80,11 @@ export default function RequestList() {
         ),
       })
         .then((requestLogList) => {
+          if (requestLogList.statusCode === 401) {
+            localStorage.clear()
+            navigate('/sign-in')
+          }
+
           dispatch(
             RequestLogsActions.AddRecords({
               startIndex: requestLogList.startIndex,

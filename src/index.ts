@@ -3,7 +3,7 @@ import OnFinished from 'on-finished'
 import TrailTraceModel from './models/trace.model'
 import mongoose from 'mongoose'
 import { Logger } from './core/logger'
-import server from './app/server'
+import server, { TServerCreationPayload } from './app/server'
 import Dayjs from 'dayjs'
 import { JSONObject } from './@types/json'
 
@@ -14,11 +14,17 @@ let MONGO_MODEL: mongoose.Model<JSONObject>
 export class TraceTrail {
   constructor(
     DB_CONNECTION_STRING: string,
-    DB_CONNECTION_OPTIONS: JSONObject = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
+    OPTIONS: {
+      DB_CONNECTION_OPTIONS?: JSONObject
+    } = {},
   ) {
+    const {
+      DB_CONNECTION_OPTIONS = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    } = OPTIONS
+
     if (!MONGO_MODEL) {
       const MONGO_CONN = mongoose.createConnection(
         DB_CONNECTION_STRING,
@@ -73,9 +79,10 @@ export class TraceTrail {
     next()
   }
 
-  UI() {
+  UI(params?: Omit<TServerCreationPayload, 'MONGO_MODEL'>) {
     return server({
       MONGO_MODEL,
+      ...params,
     })
   }
 }

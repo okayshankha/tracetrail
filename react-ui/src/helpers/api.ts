@@ -53,5 +53,8 @@ export default async function Api(_params: {
     ),
   ).catch((e) => e.response)
 
-  return response?.data
+  return {
+    statusCode: response.status,
+    ...response?.data,
+  }
 }

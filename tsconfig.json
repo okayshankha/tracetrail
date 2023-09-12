@@ -18,6 +18,7 @@
     ]
   },
   "exclude": [
+    "dev/**/*",
     "dist/**/*",
     "react-ui/*",
     "examples/*",
