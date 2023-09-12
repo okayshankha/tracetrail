@@ -1,5 +1,5 @@
 import { ReactNotifications } from 'react-notifications-component'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import TrailTraceLogo from './assets/images/trailtrace-logo.png'
 import LoginPage from './pages/Login'
@@ -15,14 +15,12 @@ function App() {
             <img src={TrailTraceLogo} alt="TraceTrail Logo" />
           </div>
 
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
-              <Route path="/">
-                <Route index element={<Main />} />
-                <Route path="sign-in" element={<LoginPage />} />
-              </Route>
+              <Route path="/" element={<Main />} />
+              <Route path="/sign-in" element={<LoginPage />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </div>
       </div>
     </>

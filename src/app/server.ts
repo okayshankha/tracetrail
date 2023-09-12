@@ -46,8 +46,6 @@ export default function (params: TServerCreationPayload) {
   app.use(cors())
   app.use(express.json())
 
-  /* app.use(express.static(path.join(__dirname, '../../ui'))) */
-
   app.post(
     '/api/sign-in',
     Wrap(async (req: Request, res: Response) => {
@@ -119,11 +117,12 @@ export default function (params: TServerCreationPayload) {
 
   // Handle requests to the sub-route
   if (Config.TRACETRAIL_ENV === 'DEV') {
-    const REACT_APP_PORT = Config.REACT_APP_PORT
+    const PORT = Config.PORT
+    const REACT_APP_PORT = Config.REACT_APP_PORT || PORT + 1
 
     const reactAppHandle = spawn('bash', [
       '-c',
-      `cd ./react-ui && PORT=${REACT_APP_PORT} npm start`,
+      `cd ./react-ui && cross-env BROWSER=none REACT_APP_API_BASE_URL=http://localhost:${PORT}/tracetrail/ PORT=${REACT_APP_PORT} npm start`,
     ])
     reactAppHandle.stderr.pipe(process.stderr)
     reactAppHandle.stdout.pipe(process.stdout)
@@ -137,7 +136,10 @@ export default function (params: TServerCreationPayload) {
       res.redirect('http://localhost:' + REACT_APP_PORT),
     )
   } else {
-    app.get('/', (_req: Request, res: Response) => {
+    app.use(express.static(path.join(__dirname, '../../ui')))
+
+    // Handle requests to the sub-route
+    app.get('*', (_req: Request, res: Response) => {
       res.sendFile(path.join(__dirname, '../../ui', 'index.html'))
     })
   }
