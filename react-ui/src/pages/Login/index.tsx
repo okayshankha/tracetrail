@@ -22,8 +22,15 @@ export default function LoginPage() {
     }
   }, [])
 
-  const onLoginSubmit = useCallback(async () => {
-    console.log(requestLogs.baseURL + requestLogs.loginEndpoint)
+  const onFormSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      FormSubmitAction()
+    },
+    [loginPassword],
+  )
+
+  const FormSubmitAction = useCallback(async () => {
     SetIsLoginButtonInActiveState(() => false)
     Api({
       method: 'POST',
@@ -80,7 +87,7 @@ export default function LoginPage() {
         <div className="card col-lg-4 mx-auto">
           <div className="card-body px-5 py-5">
             <h3 className="card-title text-left mb-3">Login</h3>
-            <form>
+            <form onSubmit={onFormSubmit}>
               <div className="form-group">
                 <label>Password</label>
                 <input
@@ -100,7 +107,7 @@ export default function LoginPage() {
                   disabled={!isLoginButtonInActiveState}
                   type="button"
                   className="btn btn-primary btn-block enter-btn"
-                  onClick={onLoginSubmit}
+                  onClick={FormSubmitAction}
                 >
                   Login
                 </button>
