@@ -5,8 +5,6 @@ import TrailTraceLogo from './assets/images/trailtrace-logo.png'
 import LoginPage from './pages/Login'
 import Main from './pages/Main'
 
-console.log(localStorage.getItem('token'))
-
 function App() {
   return (
     <>
