@@ -52,7 +52,7 @@
     }
   },
   "scripts": {
-    "start": "npx kill-port 3001 && react-scripts start",
+    "start": "npx kill-port 7778 && react-scripts start",
     "audit": "npm audit fix --omit=dev",
     "lint": "eslint --fix ./src",
     "build": "rimraf ../ui && react-scripts build && cp -r build ../ui && rm -r build",
@@ -65,6 +65,8 @@
       "react-app/jest"
     ]
   },
+  "author": "Shankhadeep Das",
+  "license": "GNU AGPLv3",
   "browserslist": {
     "production": [
       ">0.2%",
