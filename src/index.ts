@@ -45,7 +45,7 @@ export class TraceTrail {
         db: {
           address: DB_CONNECTION_STRING,
           options: DB_CONNECTION_OPTIONS,
-          collection: 'tracetrailJobs'
+          collection: 'tracetrailJobs',
         },
       })
       this.#agenda.define('AUTO_CLEAN_RECORDS', async () => {
