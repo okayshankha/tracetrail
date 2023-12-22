@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "lib": [
       "es6"
@@ -15,7 +15,8 @@
     "typeRoots": [
       "src/@types",
       "node_modules/@types",
-    ]
+    ],
+    "skipLibCheck": true
   },
   "exclude": [
     "dev/**/*",

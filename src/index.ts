@@ -1,21 +1,26 @@
-import { Request, Response, NextFunction } from 'express'
-import OnFinished from 'on-finished'
-import TrailTraceModel from './models/trace.model'
-import mongoose from 'mongoose'
-import { Logger } from './core/logger'
-import server, { TServerCreationPayload } from './app/server'
 import Dayjs from 'dayjs'
+import Agenda from 'agenda'
+import mongoose from 'mongoose'
+import OnFinished from 'on-finished'
+import { Logger } from './core/logger'
 import { JSONObject } from './@types/json'
+import TrailTraceModel from './models/trace.model'
+import { Request, Response, NextFunction } from 'express'
+import server, { TServerCreationPayload } from './app/server'
 
 const S = (payload: any) => JSON.parse(JSON.stringify(payload))
 
 let MONGO_MODEL: mongoose.Model<JSONObject>
 
 export class TraceTrail {
+  #agenda: Agenda | any
+
   constructor(
     DB_CONNECTION_STRING: string,
     OPTIONS: {
       DB_CONNECTION_OPTIONS?: JSONObject
+      AUTO_CLEAN_RECORDS_OLDER_THAN?: number
+      AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT?: Dayjs.ManipulateType
     } = {},
   ) {
     const {
@@ -23,6 +28,8 @@ export class TraceTrail {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       },
+      AUTO_CLEAN_RECORDS_OLDER_THAN = 60,
+      AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT = 'days',
     } = OPTIONS
 
     if (!MONGO_MODEL) {
@@ -31,6 +38,32 @@ export class TraceTrail {
         DB_CONNECTION_OPTIONS,
       )
       MONGO_MODEL = TrailTraceModel(MONGO_CONN)
+    }
+
+    if (AUTO_CLEAN_RECORDS_OLDER_THAN) {
+      this.#agenda = new Agenda({
+        db: {
+          address: DB_CONNECTION_STRING,
+          options: DB_CONNECTION_OPTIONS,
+          collection: 'tracetrailJobs'
+        },
+      })
+      this.#agenda.define('AUTO_CLEAN_RECORDS', async () => {
+        await MONGO_MODEL.deleteMany({
+          updatedAt: {
+            $lt: Dayjs()
+              .subtract(
+                AUTO_CLEAN_RECORDS_OLDER_THAN,
+                AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT,
+              )
+              .toDate(),
+          },
+        })
+      })
+
+      this.#agenda.start().then(() => {
+        this.#agenda.every('24 hours', 'AUTO_CLEAN_RECORDS')
+      })
     }
   }
 

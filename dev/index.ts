@@ -3,10 +3,10 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const Config = {
-  DB_URL: process.env.DB_URL,
-  LOGIN_PASSWORD: process.env.LOGIN_PASSWORD,
+  DB_URL: process.env.TRACETRAIL_DB_URL,
+  LOGIN_PASSWORD: process.env.TRACETRAIL_LOGIN_PASSWORD,
   SECRET_KEY: process.env.SECRET_KEY,
-  PORT: process.env.PORT,
+  PORT: process.env.PORT || 7777,
 }
 
 import { TraceTrail } from '../src/index'
@@ -20,20 +20,21 @@ const DB_URL = Config.DB_URL
 if (!DB_URL) {
   throw new Error('Database connection URL missing in `.env`')
 }
-const traceTrail = new TraceTrail(DB_URL)
+const traceTrail = new TraceTrail(DB_URL, {
+  AUTO_CLEAN_RECORDS_OLDER_THAN: 10, // Optional [Default: 60]
+  AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT: 'days', // Optional [Default: days]
+})
+
 // Get the UI
-/*
-    app.use(
-      '/tracetrail',
-      traceTrail.UI({
-        SALT_ROUNDS: !Number.isNaN(saltRounds) ? saltRounds : 10,
-        LOGIN_PASSWORD: Config.LOGIN_PASSWORD as string,
-        SECRET_KEY: Config.SECRET_KEY as string,
-        JWT_EXPIRY_SECS: 60 * 60 * 24, // 1 day
-      }),
-    )
-*/
-app.use('/tracetrail', traceTrail.UI())
+app.use(
+  '/tracetrail',
+  traceTrail.UI({
+    LOGIN_PASSWORD: Config.LOGIN_PASSWORD as string, // Optional [Default: 1234]
+    // SALT_ROUNDS: 10,                               // Optional [Default: 12]
+    // SECRET_KEY: Config.SECRET_KEY as string,       // Optional [Default: Auto]
+    // JWT_EXPIRY_SECS: 60 * 60 * 24,                 // Optional [Default: 1 day ]
+  }),
+)
 
 // You need to use traceTrail.MiddleWare to make this package work.
 app.use(traceTrail.MiddleWare)

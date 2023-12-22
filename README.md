@@ -15,15 +15,28 @@ npm install tracetrail
 
 ## Usage
 
+For regular javascript code
 ```javascript
-import { TraceTrail } from 'tracetrail'
+const { TraceTrail } = require('tracetrail')
+```
+
+For CJS / Module Imports
+```javascript
+import { TraceTrail } from 'tracetrail' 
+```
+
+```javascript
+import { TraceTrail } from 'tracetrail' 
 import express from 'express'
 
 const port = 4444
 const app = express()
 
 // You can use a separate database to keep things neat and clean.
-const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail')
+const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail', {
+  AUTO_CLEAN_RECORDS_OLDER_THAN: 10,          // Optional [Default: 60]
+  AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT: 'days'  // Optional [Default: days]
+})
 
 // You need to use traceTrail.MiddleWare to make this package work.
 app.use(traceTrail.MiddleWare)
@@ -47,10 +60,21 @@ const port = 4444
 const app = express()
 
 // You can use a separate database to keep things neat and clean.
-const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail')
+const traceTrail = new TraceTrail('mongodb://localhost:27017/TraceTrail', {
+  AUTO_CLEAN_RECORDS_OLDER_THAN: 10,          // Optional [Default: 60]
+  AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT: 'days'  // Optional [Default: days]
+})
 
 // Get the UI
-app.use('/tracetrail', traceTrail.UI())
+app.use(
+  '/tracetrail',
+  traceTrail.UI({
+    LOGIN_PASSWORD: '1234',                      // Optional [Default: 1234]
+    // SALT_ROUNDS: 10,                          // Optional [Default: 12]
+    // SECRET_KEY: Config.SECRET_KEY as string,  // Optional [Default: Auto]
+    // JWT_EXPIRY_SECS: 60 * 60 * 24,            // Optional [Default: 1 day]
+  }),
+)
 
 // You need to use traceTrail.MiddleWare to make this package work.
 app.use(traceTrail.MiddleWare)
