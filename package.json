@@ -21,17 +21,17 @@
     "logging"
   ],
   "scripts": {
+    "release": "release-it",
+    "prepare": "husky install",
+    "prepublishOnly": "npm run build",
     "postinstall": "node install-react-ui",
     "start": "npm run build && node dist/index.js",
-    "build": "rimraf ./dist && tsc -d && cd react-ui && npm run build",
-    "lint": "eslint --fix . --ext .ts && cd react-ui && npm run lint",
-    "release": "release-it",
-    "prepublishOnly": "npm run build",
-    "example:ts": "ts-node examples/typescript-example.ts",
     "example:js": "node examples/javascript-example.js",
-    "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1",
-    "prepare": "husky install",
-    "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register -- ./dev/index.ts"
+    "example:ts": "ts-node examples/typescript-example.ts",
+    "lint": "eslint --fix . --ext .ts && cd react-ui && npm run lint",
+    "build": "rimraf ./dist && tsc -d && cd react-ui && npm run build",
+    "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register -- ./dev/index.ts",
+    "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1"
   },
   "repository": {
     "type": "git",
