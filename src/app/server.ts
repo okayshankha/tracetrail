@@ -1,16 +1,16 @@
+import _ from 'lodash'
 import path from 'path'
 import cors from 'cors'
-import _ from 'lodash'
-import express, { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import { Paginator } from '../helpers/pagination.helper'
-import { readFileSync } from 'fs'
-import { spawn } from 'child_process'
 import mongoose from 'mongoose'
-import { JSONObject } from '../@types/json'
-import JWTHelper, { IJwtHelperConstructorPayload } from '../helpers/jwt.helper'
+import { readFileSync } from 'fs'
 import { Wrap } from '../core/utils'
+import { spawn } from 'child_process'
 import { Config } from '../core/config'
+import { JSONObject } from '../@types/json'
+import express, { Request, Response } from 'express'
+import { Paginator } from '../helpers/pagination.helper'
+import JWTHelper, { IJwtHelperConstructorPayload } from '../helpers/jwt.helper'
 
 interface IServerCreationPayload {
   MONGO_MODEL: mongoose.Model<JSONObject>

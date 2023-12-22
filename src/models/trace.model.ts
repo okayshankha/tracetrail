@@ -42,5 +42,5 @@ const schema: Schema = new Schema<ITraceTrail>(
 )
 
 export default function (DB_CONNECTION: Connection) {
-  return DB_CONNECTION.model('TraceTrail', schema, 'TraceTrail')
+  return DB_CONNECTION.model('TraceTrail', schema, 'tracetrail')
 }

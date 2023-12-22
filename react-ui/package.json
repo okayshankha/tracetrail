@@ -65,6 +65,8 @@
       "react-app/jest"
     ]
   },
+  "author": "Shankhadeep Das",
+  "license": "GNU AGPLv3",
   "browserslist": {
     "production": [
       ">0.2%",
