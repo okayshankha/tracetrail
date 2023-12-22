@@ -7,7 +7,6 @@ import { Paginator } from '../helpers/pagination.helper'
 import { readFileSync } from 'fs'
 import { spawn } from 'child_process'
 import mongoose from 'mongoose'
-import { kill } from 'cross-port-killer'
 import { JSONObject } from '../@types/json'
 import JWTHelper, { IJwtHelperConstructorPayload } from '../helpers/jwt.helper'
 import { Wrap } from '../core/utils'
@@ -121,23 +120,18 @@ export default function (params: TServerCreationPayload) {
     const PORT = Config.PORT
     const REACT_APP_PORT = Config.REACT_APP_PORT || PORT + 1
 
-    kill(REACT_APP_PORT).then((pids) => {
-      // console.log(pids)
-
-      const reactAppHandle = spawn('bash', [
-        '-c',
-        `cd ./react-ui && cross-env BROWSER=none REACT_APP_API_BASE_URL=http://localhost:${PORT}/tracetrail/ PORT=${REACT_APP_PORT} npm start`,
-      ])
-      reactAppHandle.stderr.pipe(process.stderr)
-      reactAppHandle.stdout.pipe(process.stdout)
-      reactAppHandle.on('exit', (code) => {
-        throw new Error('REACT APP exited with code ' + code)
-      })
-      process.on('exit', () => {
-        reactAppHandle.kill()
-      })
+    const reactAppHandle = spawn('bash', [
+      '-c',
+      `cd ./react-ui && cross-env BROWSER=none REACT_APP_API_BASE_URL=http://localhost:${PORT}/tracetrail/ PORT=${REACT_APP_PORT} npm start`,
+    ])
+    reactAppHandle.stderr.pipe(process.stderr)
+    reactAppHandle.stdout.pipe(process.stdout)
+    reactAppHandle.on('exit', (code) => {
+      throw new Error('REACT APP exited with code ' + code)
     })
-
+    process.on('exit', () => {
+      reactAppHandle.kill()
+    })
     app.use('/', (_req, res) =>
       res.redirect('http://localhost:' + REACT_APP_PORT),
     )
