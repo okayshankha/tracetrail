@@ -105,16 +105,8 @@ If you want to set up the project in your local follow these steps:
   - Make sure to update the MongoDB url.
 ---
 
-That's it, you are all set. Now you can open your browser and open ```http//:localhost:7777/tracetrail``` it will open TraceTrail UI.
+That's it, you are all set. Now you can open your browser and open ```http://localhost:7777/tracetrail``` it will open TraceTrail UI.
 
 If you haven't changed any ports, then the following would be true.
-- Backend Server: ```http//:localhost:7777```
-- React Front End: ```http//:localhost:7778```
-
----
-
-# Future Scope
-- [done] - Login page for access authorization
-- Write test cases
-- [on-hold] - Socket.io implementation for real-time data fetch
-- [on-hold] - Support multiple databases
+- Backend Server: ```http://localhost:7777```
+- React Front End: ```http://localhost:7778```
