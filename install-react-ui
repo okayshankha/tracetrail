@@ -6,7 +6,7 @@ const reactUiDir = 'react-ui';
 
 if (fs.existsSync(reactUiDir)) {
   console.log(`Found '${reactUiDir}' directory. Installing dependencies...`);
-  execSync(`cd ${reactUiDir} && npm i --legacy-peer-deps --no-warnings`, { stdio: 'inherit' });
+  execSync(`cd ${reactUiDir} && npm ci --legacy-peer-deps --no-warnings`, { stdio: 'inherit' });
 } else {
   console.log(`'${reactUiDir}' directory not found. Skipping postinstall script.`);
 }
