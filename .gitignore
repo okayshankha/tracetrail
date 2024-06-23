@@ -8,6 +8,9 @@ dist/
 ui/
 *.js.map
 
+# Example files
+examples/
+
 # Dependency directories
 node_modules/
 

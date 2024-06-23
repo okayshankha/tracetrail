@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import path from 'path'
 import cors from 'cors'
-import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 import mongoose from 'mongoose'
 import { readFileSync } from 'fs'
 import { Wrap } from '../core/utils'
@@ -16,6 +16,7 @@ interface IServerCreationPayload {
   MONGO_MODEL: mongoose.Model<JSONObject>
   LOGIN_PASSWORD?: string
   SALT_ROUNDS?: number
+  KEY_LEN?: number
 }
 
 export type TServerCreationPayload = IServerCreationPayload &
@@ -31,8 +32,12 @@ export default function (params: TServerCreationPayload) {
     SECRET_KEY,
     JWT_EXPIRY_SECS,
     SALT_ROUNDS = DEFAULT_SALT_ROUNDS,
+    KEY_LEN = 64,
   } = params
-  const PASSWORD_HASH = bcrypt.hashSync(LOGIN_PASSWORD, SALT_ROUNDS)
+  const STORED_SALT = crypto.randomBytes(SALT_ROUNDS).toString('hex')
+  const PASSWORD_HASH = crypto
+    .scryptSync(LOGIN_PASSWORD, STORED_SALT, KEY_LEN)
+    .toString('hex')
 
   const { version } = JSON.parse(
     readFileSync(
@@ -56,7 +61,9 @@ export default function (params: TServerCreationPayload) {
         })
       }
 
-      const isPasswordValid = await bcrypt.compare(password, PASSWORD_HASH)
+      const isPasswordValid =
+        crypto.scryptSync(password, STORED_SALT, KEY_LEN).toString('hex') ===
+        PASSWORD_HASH
 
       if (!isPasswordValid) {
         return res.status(401).json({
