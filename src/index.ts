@@ -6,7 +6,11 @@ import { Logger } from './core/logger'
 import { JSONObject } from './@types/json'
 import TrailTraceModel from './models/trace.model'
 import { Request, Response, NextFunction } from 'express'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import server, { TServerCreationPayload } from './app/server'
+
+// const events = require('events')
+// events.defaultMaxListeners = 30
 
 const S = (payload: any) => JSON.parse(JSON.stringify(payload))
 
@@ -16,7 +20,7 @@ export class TraceTrail {
   #agenda: Agenda | any
 
   constructor(
-    DB_CONNECTION_STRING: string,
+    DB_CONNECTION_STRING?: string,
     OPTIONS: {
       DB_CONNECTION_OPTIONS?: JSONObject
       AUTO_CLEAN_RECORDS_OLDER_THAN?: number
@@ -33,37 +37,55 @@ export class TraceTrail {
     } = OPTIONS
 
     if (!MONGO_MODEL) {
-      const MONGO_CONN = mongoose.createConnection(
-        DB_CONNECTION_STRING,
-        DB_CONNECTION_OPTIONS,
-      )
-      MONGO_MODEL = TrailTraceModel(MONGO_CONN)
-    }
+      const fn = () => {
+        // console.log('DB_CONNECTION_STRING', DB_CONNECTION_STRING)
 
-    if (AUTO_CLEAN_RECORDS_OLDER_THAN) {
-      this.#agenda = new Agenda({
-        db: {
-          address: DB_CONNECTION_STRING,
-          options: DB_CONNECTION_OPTIONS,
-          collection: 'tracetrailJobs',
-        },
-      })
-      this.#agenda.define('AUTO_CLEAN_RECORDS', async () => {
-        await MONGO_MODEL.deleteMany({
-          updatedAt: {
-            $lt: Dayjs()
-              .subtract(
-                AUTO_CLEAN_RECORDS_OLDER_THAN,
-                AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT,
-              )
-              .toDate(),
+        const MONGO_CONN = mongoose.createConnection(
+          DB_CONNECTION_STRING || '',
+          DB_CONNECTION_OPTIONS,
+        )
+        MONGO_MODEL = TrailTraceModel(MONGO_CONN)
+        // console.log('MONGO_MODEL', MONGO_MODEL)
+
+        if (AUTO_CLEAN_RECORDS_OLDER_THAN) {
+          this.#agenda = new Agenda({
+            db: {
+              address: DB_CONNECTION_STRING || '',
+              options: DB_CONNECTION_OPTIONS,
+              collection: 'tracetrailJobs',
+            },
+          })
+          this.#agenda.define('AUTO_CLEAN_RECORDS', async () => {
+            await MONGO_MODEL.deleteMany({
+              updatedAt: {
+                $lt: Dayjs()
+                  .subtract(
+                    AUTO_CLEAN_RECORDS_OLDER_THAN,
+                    AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT,
+                  )
+                  .toDate(),
+              },
+            })
+          })
+
+          this.#agenda.start().then(() => {
+            this.#agenda.every('24 hours', 'AUTO_CLEAN_RECORDS')
+          })
+        }
+      }
+
+      if (!DB_CONNECTION_STRING) {
+        MongoMemoryServer.create({
+          instance: {
+            dbName: 'tracetrail',
           },
+        }).then((mongod) => {
+          DB_CONNECTION_STRING = mongod.getUri() + 'tracetrail'
+          fn()
         })
-      })
-
-      this.#agenda.start().then(() => {
-        this.#agenda.every('24 hours', 'AUTO_CLEAN_RECORDS')
-      })
+      } else {
+        fn()
+      }
     }
   }
 
@@ -113,6 +135,7 @@ export class TraceTrail {
   }
 
   UI(params?: Omit<TServerCreationPayload, 'MONGO_MODEL'>) {
+    // console.log('server => MONGO_MODEL', MONGO_MODEL)
     return server({
       MONGO_MODEL,
       ...params,

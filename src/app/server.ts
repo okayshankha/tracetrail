@@ -34,6 +34,7 @@ export default function (params: TServerCreationPayload) {
     SALT_ROUNDS = DEFAULT_SALT_ROUNDS,
     KEY_LEN = 64,
   } = params
+
   const STORED_SALT = crypto.randomBytes(SALT_ROUNDS).toString('hex')
   const PASSWORD_HASH = crypto
     .scryptSync(LOGIN_PASSWORD, STORED_SALT, KEY_LEN)
@@ -103,6 +104,8 @@ export default function (params: TServerCreationPayload) {
 
       delete req.query.startIndex
       delete req.query.itemsPerPage
+
+      // console.log('JWT Payload MONGO_MODEL', MONGO_MODEL)
 
       const result = await Paginator.Paginate({
         model: MONGO_MODEL,
