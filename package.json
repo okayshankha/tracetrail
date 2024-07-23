@@ -27,9 +27,10 @@
     "postinstall": "node install-react-ui",
     "start": "npm run build && node dist/index.js",
     "example:js": "npm run build && node examples/javascript-example.js",
-    "example:ts": "ts-node examples/typescript-example.ts",
+    "example:ts": "nodemon --watch src --exec \"ts-node -r tsconfig-paths/register examples/typescript-example.ts\"",
     "lint": "eslint --fix . --ext .ts && cd react-ui && npm run lint",
-    "build": "rimraf ./dist && tsc -d && cd react-ui && npm run build",
+    "build-ui": "cd react-ui && npm run build",
+    "build": "rimraf ./dist && tsc -d && npm run build-ui",
     "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register -- ./dev/index.ts",
     "test": "echo \"Error: no test specified. Will be added in later iterations.\" && exit 1"
   },

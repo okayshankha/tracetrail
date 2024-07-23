@@ -2,6 +2,8 @@ import Express from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
 
+process.env.TRACETRAIL_ENV = 'DEV'
+
 const Config = {
   DB_URL: process.env.TRACETRAIL_DB_URL,
   LOGIN_PASSWORD: process.env.TRACETRAIL_LOGIN_PASSWORD,
@@ -17,9 +19,7 @@ const app = Express()
 app.use(cors())
 
 const DB_URL = Config.DB_URL
-if (!DB_URL) {
-  throw new Error('Database connection URL missing in `.env`')
-}
+
 const traceTrail = new TraceTrail(DB_URL, {
   AUTO_CLEAN_RECORDS_OLDER_THAN: 10, // Optional [Default: 60]
   AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT: 'days', // Optional [Default: days]

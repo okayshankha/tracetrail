@@ -16,6 +16,10 @@ const S = (payload: any) => JSON.parse(JSON.stringify(payload))
 
 let MONGO_MODEL: mongoose.Model<JSONObject>
 
+export function GetMongoModel() {
+  return MONGO_MODEL
+}
+
 export class TraceTrail {
   #agenda: Agenda | any
 
@@ -38,14 +42,11 @@ export class TraceTrail {
 
     if (!MONGO_MODEL) {
       const fn = () => {
-        // console.log('DB_CONNECTION_STRING', DB_CONNECTION_STRING)
-
         const MONGO_CONN = mongoose.createConnection(
           DB_CONNECTION_STRING || '',
           DB_CONNECTION_OPTIONS,
         )
         MONGO_MODEL = TrailTraceModel(MONGO_CONN)
-        // console.log('MONGO_MODEL', MONGO_MODEL)
 
         if (AUTO_CLEAN_RECORDS_OLDER_THAN) {
           this.#agenda = new Agenda({
@@ -137,7 +138,6 @@ export class TraceTrail {
   UI(params?: Omit<TServerCreationPayload, 'MONGO_MODEL'>) {
     // console.log('server => MONGO_MODEL', MONGO_MODEL)
     return server({
-      MONGO_MODEL,
       ...params,
     })
   }

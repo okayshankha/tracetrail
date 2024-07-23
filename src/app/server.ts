@@ -2,18 +2,15 @@ import _ from 'lodash'
 import path from 'path'
 import cors from 'cors'
 import crypto from 'crypto'
-import mongoose from 'mongoose'
 import { readFileSync } from 'fs'
 import { Wrap } from '../core/utils'
 import { spawn } from 'child_process'
 import { Config } from '../core/config'
-import { JSONObject } from '../@types/json'
 import express, { Request, Response } from 'express'
 import { Paginator } from '../helpers/pagination.helper'
 import JWTHelper, { IJwtHelperConstructorPayload } from '../helpers/jwt.helper'
 
 interface IServerCreationPayload {
-  MONGO_MODEL: mongoose.Model<JSONObject>
   LOGIN_PASSWORD?: string
   SALT_ROUNDS?: number
   KEY_LEN?: number
@@ -27,7 +24,6 @@ const DEFAULT_SALT_ROUNDS = 12
 
 export default function (params: TServerCreationPayload) {
   const {
-    MONGO_MODEL,
     LOGIN_PASSWORD = '1234', // 1234 is the default password
     SECRET_KEY,
     JWT_EXPIRY_SECS,
@@ -105,10 +101,7 @@ export default function (params: TServerCreationPayload) {
       delete req.query.startIndex
       delete req.query.itemsPerPage
 
-      // console.log('JWT Payload MONGO_MODEL', MONGO_MODEL)
-
       const result = await Paginator.Paginate({
-        model: MONGO_MODEL,
         query: _.omitBy(req.query, _.isNil),
         startIndex: +startIndex,
         itemsPerPage: +itemsPerPage,
