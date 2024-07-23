@@ -112,7 +112,7 @@ export const RequestLogsSlice = createSlice({
           state.npm.currentPackageVersion !== state.npm.latestPackageVersion
       }
 
-      if (records.length > 0) {
+      if (records?.length > 0) {
         state.prevStartIndex = state.startIndex
       } else {
         state.startIndex = state.prevStartIndex

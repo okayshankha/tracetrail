@@ -18,3 +18,7 @@ export function Wrap(controller: CallableFunction) {
     }
   }
 }
+
+// Promise based sleep
+export const Sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms))

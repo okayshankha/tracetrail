@@ -7,15 +7,12 @@ import express from 'express'
 import { Logger } from '../src/core/logger'
 
 const app = express()
-const port = 4444
+const port = 7777 // For testing with TS, do not change this port.
 
-const traceTrail = new TraceTrail(
-  process.env.TRACETRAIL_DB_URL || 'mongodb://localhost:27017/TraceTrail',
-  {
-    AUTO_CLEAN_RECORDS_OLDER_THAN: 10, // Optional [Default: 60]
-    AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT: 'days', // Optional [Default: days]
-  },
-)
+const traceTrail = new TraceTrail(process.env.TRACETRAIL_DB_URL, {
+  AUTO_CLEAN_RECORDS_OLDER_THAN: 10, // Optional [Default: 60]
+  AUTO_CLEAN_RECORDS_OLDER_THAN_UNIT: 'days', // Optional [Default: days]
+})
 
 app.use(cors())
 app.use(
