@@ -1,3 +1,4 @@
+import { GetMongoModel } from '..'
 import { Logger } from '../core/logger'
 
 const ITEMS_PER_PAGE = 100
@@ -5,7 +6,7 @@ const ITEMS_PER_PAGE = 100
 class PaginationHelperClass {
   async Paginate(inputs: {
     q?: string
-    model: any
+    model?: any
     populate?: any
     startIndex?: number
     itemsPerPage?: number
@@ -16,7 +17,7 @@ class PaginationHelperClass {
     try {
       const {
         q,
-        model,
+        model = GetMongoModel(),
         populate = null,
         startIndex = 1,
         itemsPerPage = ITEMS_PER_PAGE,

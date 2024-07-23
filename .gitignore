@@ -38,3 +38,4 @@ node_modules/
 .env
 
 .tracetrail
+.in-memory-mongo-binary

@@ -5,7 +5,7 @@
     "lib": [
       "es6"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
@@ -19,6 +19,7 @@
     "skipLibCheck": true
   },
   "exclude": [
+    "commitlint.config.js",
     "dev/**/*",
     "dist/**/*",
     "react-ui/*",
